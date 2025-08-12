@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <title>คำนวณอายุ Age | เครื่องคิดอายุออนไลน์</title>
+<meta name="description" content="เว็บไซต์คำนวณอายุจากวันเดือนปีเกิด แสดงผลเป็นปี วัน ชั่วโมง นาที ใช้งานฟรี">
+<meta name="keywords" content="คำนวณอายุ, Age Calculator, เครื่องคิดอายุ, อายุออนไลน์, วันเกิด, HTML, JavaScript">
+  <meta name="google-site-verification" content="wjX0OQqSfGmAlcqTqr6ATbxwQvx031rglTBiFbN4SfU" />
+<style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-blur: blur(50px);
+      --text-color: #09381;
+      --accent: rgba(255, 255, 255, 0.03);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-color);
+      background: linear-gradient(-30deg, #108, #719, #928301, #f82);
+      background-size: 500% 500%;
+      animation: gradientFlow 20s ease infinite;
+    }
+
+     @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 80% 100%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      padding: 30px;
+      width: 370px;
+      box-shadow: 0 0 60px rgba(255,255,255,0.05);
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.05);
+      z-index: 1;
+    }
+
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 30%;
+      padding: 10px;
+      border-radius: 50px;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-color);
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--accent);
+      color: black;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>คำนวณอายุ</h2>
+
+    <div class="input-group">
+      <input type="number" id="day" placeholder="วัน" min="1" max="31">
+      <input type="number" id="month" placeholder="เดือน" min="1" max="12">
+      <input type="number" id="year" placeholder="ปี" min="1900" max="2100">
+    </div>
+
+    <button onclick="calculateAge()">คำนวณ</button>
+    <button onclick="clearFields()">ล้างข้อมูล</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const day = parseInt(document.getElementById("day").value);
+      const month = parseInt(document.getElementById("month").value) - 1;
+      const year = parseInt(document.getElementById("year").value);
+
+      if (isNaN(day) || isNaN(month) || isNaN(year)) {
+        document.getElementById("result").innerText = "กรุณากรอกวัน เดือน ปีให้ครบ";
+        return;
+      }
+
+      const birthdate = new Date(year, month, day);
+      const now = new Date();
+
+      if (birthdate > now || birthdate.getDate() !== day || birthdate.getMonth() !== month || birthdate.getFullYear() !== year) {
+        document.getElementById("result").innerText = "วันที่ไม่ถูกต้อง";
+        return;
+      }
+
+      const diffMs = now - birthdate;
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffYears = Math.floor(diffDays / 365.25);
+
+      document.getElementById("result").innerHTML = `
+        คุณเกิดมาแล้วประมาณ:<br>
+        <strong>${diffYears}</strong> ปี<br>
+        <strong>${diffDays}</strong> วัน<br>
+        <strong>${diffHours}</strong> ชั่วโมง<br>
+        <strong>${diffMins}</strong> นาที
+      `;
+    }
+
+    function clearFields() {
+      document.getElementById("day").value = "";
+      document.getElementById("month").value = "";
+      document.getElementById("year").value = "";
+      document.getElementById("result").innerText = "";
+    }
+
+    function changeTheme() {
+      const theme = document.getElementById("theme").value;
+      const root = document.documentElement;
+
+      if (theme === "classic") {
+        root.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--glass-blur', 'blur(15px)');
+        root.style.setProperty('--text-color', '#fff');
+        root.style.setProperty('--accent', '#00c6ff');
+      } else {
+        root.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.03)');
+        root.style.setProperty('--glass-blur', 'blur(40px)');
+        root.style.setProperty('--text-color', '#ffffff');
+        root.style.setProperty('--accent', '#00ffe0');
+      }
+    }
+  </script>
+</body>
+</html>
